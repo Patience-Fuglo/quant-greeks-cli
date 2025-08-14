@@ -1,0 +1,5 @@
+Metadata-Version: 2.4
+Name: quant-greeks-cli
+Version: 0.1
+Requires-Dist: scipy
+Dynamic: requires-dist
