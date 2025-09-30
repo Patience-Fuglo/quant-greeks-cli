@@ -25,6 +25,12 @@ def main():
         default=100,
         help="Number of steps for the binomial model (default: 100; ignored for Black-Scholes)"
     )
+
+    parser.add_argument(
+    '--american',
+    action='store_true',
+    help='Price an American style option (default is European)'
+)
     args = parser.parse_args()
 
     if args.model == "black-scholes":
@@ -40,6 +46,17 @@ def main():
         print(f"Binomial {args.option_type} option price: {price:.5f}")
     else:
         print("Invalid model selected!")
+
+    price = binomial_option_pricing(
+    S=args.S,
+    K=args.K,
+    T=args.T,
+    r=args.r,
+    sigma=args.sigma,
+    steps=args.steps,
+    option_type=args.option_type,
+    american=args.american  # Pass the flag!
+)
 
 if __name__ == "__main__":
     main()
