@@ -76,6 +76,30 @@ pytest
 (Requires pytest, included in `requirements.txt`.)
 
 ---
+## Binomial Option Pricing Model (New Feature!)
+
+This CLI now supports option pricing using both the Black-Scholes and Binomial models.
+
+### Usage Examples
+
+**Black-Scholes (default):**
+```bash
+python cli.py --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2
+```
+
+**Binomial model (with steps):**
+```bash
+python cli.py --model binomial --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --steps 100
+```
+
+- `--model`: Choose `binomial` or `black-scholes` (default is `black-scholes`)
+- `--steps`: Number of steps for the binomial tree (only used for binomial model; default = 100)
+
+### What’s New
+
+- Add binomial model for European option pricing
+- New CLI arguments: `--model` and `--steps`
+- All previous Black-Scholes functionality remains unchanged
 
 ## Contributing
 
