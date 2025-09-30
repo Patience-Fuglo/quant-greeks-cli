@@ -1,3 +1,5 @@
+![CI](https://github.com/Patience-Fuglo/quant-greeks-cli/actions/workflows/ci.yml/badge.svg)
+
 # Quant Greeks CLI Tool
 
 ## Project Description
