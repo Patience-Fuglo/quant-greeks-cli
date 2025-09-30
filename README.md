@@ -73,17 +73,6 @@ Calculate option Greeks from the CLI:
 ```bash
 python cli.py --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2
 
-```
-Where:
-- `--option_type` is "call" or "put"
-- `--S` is the current stock price
-- `--K` is the strike price
-- `--T` is time to maturity (in years)
-- `--r` is the annual risk-free rate (decimal)
-- `--sigma` is volatility (standard deviation, decimal)
-
----
-
 ## Example
 
 ```bash
