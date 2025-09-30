@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="quant-greeks-cli",
-    version="1.0.1",
+    version="1.1.0",
     description="A CLI tool to calculate Black-Scholes Greeks for options pricing.",
     long_description=long_description,
     long_description_content_type="text/markdown",
