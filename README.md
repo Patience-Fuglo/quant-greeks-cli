@@ -1,5 +1,6 @@
 ![CI](https://github.com/Patience-Fuglo/quant-greeks-cli/actions/workflows/ci.yml/badge.svg)
 
+
 # Quant Greeks CLI Tool
 
 ## Project Description
@@ -16,6 +17,27 @@ The Quant Greeks CLI Tool is a lightweight command-line application for calculat
 - **CI/CD:** Integrated with GitHub Actions for continuous testing and reliability.
 
 ---
+
+## Usage
+
+After installation, use the `quant-greeks` command globally from your terminal:
+
+```bash
+quant-greeks --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2
+```
+
+Where:
+- `--option_type` is "call" or "put"
+- `--S` is the current stock price
+- `--K` is the strike price
+- `--T` is time to maturity (in years)
+- `--r` is the annual risk-free rate (decimal)
+- `--sigma` is volatility (decimal)
+
+For help, run:
+```bash
+quant-greeks --help
+```
 
 ## Installation
 
@@ -36,7 +58,13 @@ The Quant Greeks CLI Tool is a lightweight command-line application for calculat
    pip install -r requirements.txt
    ```
 
----
+4. **Install quant-greeks-cli:**
+```bash
+pip install quant-greeks-cli
+
+
+You can install the Quant Greeks CLI tool directly from [PyPI](https://pypi.org/project/quant-greeks-cli/):
+
 
 ## Usage
 
@@ -44,6 +72,7 @@ Calculate option Greeks from the CLI:
 
 ```bash
 python cli.py --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2
+
 ```
 Where:
 - `--option_type` is "call" or "put"
