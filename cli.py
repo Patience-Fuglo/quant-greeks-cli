@@ -1,6 +1,6 @@
 import argparse
 from greeks import delta, gamma, vega, theta, rho
-from binomial import binomial_option_price
+from binomial import binomial_option_pricing
 
 def main():
     parser = argparse.ArgumentParser(
@@ -25,12 +25,11 @@ def main():
         default=100,
         help="Number of steps for the binomial model (default: 100; ignored for Black-Scholes)"
     )
-
     parser.add_argument(
-    '--american',
-    action='store_true',
-    help='Price an American style option (default is European)'
-)
+        '--american',
+        action='store_true',
+        help='Price an American style option (default is European)'
+    )
     args = parser.parse_args()
 
     if args.model == "black-scholes":
@@ -40,23 +39,19 @@ def main():
         print(f"Theta: {theta(args.option_type, args.S, args.K, args.T, args.r, args.sigma):.5f}")
         print(f"Rho:   {rho(args.option_type, args.S, args.K, args.T, args.r, args.sigma):.5f}")
     elif args.model == "binomial":
-        price = binomial_option_price(
-            args.option_type, args.S, args.K, args.T, args.r, args.sigma, args.steps
+        price = binomial_option_pricing(
+            S=args.S,
+            K=args.K,
+            T=args.T,
+            r=args.r,
+            sigma=args.sigma,
+            steps=args.steps,
+            option_type=args.option_type,
+            american=args.american
         )
-        print(f"Binomial {args.option_type} option price: {price:.5f}")
+        print(f"Binomial {args.option_type} option price ({'American' if args.american else 'European'}): {price:.5f}")
     else:
         print("Invalid model selected!")
-
-    price = binomial_option_pricing(
-    S=args.S,
-    K=args.K,
-    T=args.T,
-    r=args.r,
-    sigma=args.sigma,
-    steps=args.steps,
-    option_type=args.option_type,
-    american=args.american  # Pass the flag!
-)
 
 if __name__ == "__main__":
     main()
