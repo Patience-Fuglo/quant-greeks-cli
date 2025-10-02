@@ -102,6 +102,19 @@ python cli.py --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2
 ```bash
 python cli.py --model binomial --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --steps 100
 ```
+## New: Dividend Yield Support
+
+You can now specify a **continuous dividend yield** using the `--q` flag for Black-Scholes and Binomial models:
+
+```bash
+python cli.py --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --q 0.03
+```
+
+- `--q`: The continuous dividend yield (as a decimal, e.g., 0.03 for 3%).  
+- If omitted, defaults to 0 (no dividends).
+
+This works for pricing and all Black-Scholes Greeks!
+
 
 - `--model`: Choose `binomial` or `black-scholes` (default is `black-scholes`)
 - `--steps`: Number of steps for the binomial tree (only used for binomial model; default = 100)

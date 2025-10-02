@@ -15,6 +15,12 @@ def main():
     parser.add_argument("--r", type=float, required=True, help="Annual risk-free interest rate (decimal, e.g., 0.01)")
     parser.add_argument("--sigma", type=float, help="Annual volatility (decimal, e.g., 0.2)")
     parser.add_argument(
+        "--q",
+        type=float,
+        default=0.0,
+        help="Continuous dividend yield (annualized, decimal, e.g., 0.03). Default is 0.0"
+    )
+    parser.add_argument(
         "--model",
         type=str,
         choices=["black-scholes", "binomial"],
@@ -56,7 +62,8 @@ def main():
             K=args.K,
             T=args.T,
             r=args.r,
-            price=args.price
+            price=args.price,
+            q=args.q  # Pass dividend yield to implied volatility calculation
         )
         print(f"Implied volatility: {imp_vol:.5f}")
         return
@@ -67,14 +74,14 @@ def main():
             print("Error: --sigma is required for Black-Scholes pricing")
             return
         price = black_scholes_price(
-            args.option_type, args.S, args.K, args.T, args.r, args.sigma
+            args.option_type, args.S, args.K, args.T, args.r, args.sigma, q=args.q
         )
         print(f"Black-Scholes {args.option_type} price: {price:.5f}")
-        print(f"Delta: {delta(args.option_type, args.S, args.K, args.T, args.r, args.sigma):.5f}")
-        print(f"Gamma: {gamma(args.option_type, args.S, args.K, args.T, args.r, args.sigma):.5f}")
-        print(f"Vega: {vega(args.option_type, args.S, args.K, args.T, args.r, args.sigma):.5f}")
-        print(f"Theta: {theta(args.option_type, args.S, args.K, args.T, args.r, args.sigma):.5f}")
-        print(f"Rho: {rho(args.option_type, args.S, args.K, args.T, args.r, args.sigma):.5f}")
+        print(f"Delta: {delta(args.option_type, args.S, args.K, args.T, args.r, args.sigma, q=args.q):.5f}")
+        print(f"Gamma: {gamma(args.option_type, args.S, args.K, args.T, args.r, args.sigma, q=args.q):.5f}")
+        print(f"Vega: {vega(args.option_type, args.S, args.K, args.T, args.r, args.sigma, q=args.q):.5f}")
+        print(f"Theta: {theta(args.option_type, args.S, args.K, args.T, args.r, args.sigma, q=args.q):.5f}")
+        print(f"Rho: {rho(args.option_type, args.S, args.K, args.T, args.r, args.sigma, q=args.q):.5f}")
 
     elif args.model == "binomial":
         if args.sigma is None:
@@ -88,7 +95,8 @@ def main():
             sigma=args.sigma,
             steps=args.steps,
             option_type=args.option_type,
-            american=args.american
+            american=args.american,
+            q=args.q  # Pass dividend yield to binomial pricing
         )
         style = "American" if args.american else "European"
         print(f"Binomial {args.option_type} option price ({style}): {price:.5f}")
