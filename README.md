@@ -1,151 +1,23 @@
-# Quant Greeks CLI Tool
+## Put-Call Parity CLI Feature
 
-![CI](https://github.com/Patience-Fuglo/quant-greeks-cli/actions/workflows/ci.yml/badge.svg)
+### Overview
+The Put-Call Parity Checker allows users to verify the relationship between put and call options, ensuring that arbitrage opportunities do not exist in the market.
 
-A lightweight command-line tool for calculating the five main Black-Scholes Greeks (Delta, Gamma, Vega, Theta, Rho). Designed for traders, quants, and finance students, this tool helps you analyze options risk and sensitivity directly from your terminal.
-
----
-
-## Features
-
-- **Black-Scholes Greeks Calculator:** Computes Delta, Gamma, Vega, Theta, and Rho
-- **Binomial and Black-Scholes Option Pricing:** Supports both models; Binomial supports American and European options
-- **Implied Volatility Calculator:** Computes the implied volatility given a market price for a European option
-- **Simple CLI:** Run calculations from your terminal with intuitive arguments
-- **100% Test Coverage:** Every calculation is unit tested for accuracy
-- **CI/CD:** Integrated with GitHub Actions for continuous testing and reliability
-
----
-
-## Installation
-
-Install directly from PyPI:
+### Usage
+To use the Put-Call Parity Checker, run the following command:
 
 ```bash
-pip install quant-greeks-cli
-```
-
-Or clone the repository:
-
-```bash
-git clone https://github.com/Patience-Fuglo/quant-greeks-cli.git
-cd quant-greeks-cli
-python3 -m venv .venv       # optional but recommended
-source .venv/bin/activate
-pip install -r requirements.txt
-pip install .
-```
-
----
-
-## Usage
-
-Calculate option Greeks from the CLI:
-
-```bash
-quant-greeks --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2
-```
-
-Where:
-
-- `--option_type` is `"call"` or `"put"`
-- `--S` is the current stock price
-- `--K` is the strike price
-- `--T` is time to maturity (in years)
-- `--r` is the annual risk-free rate (decimal)
-- `--sigma` is volatility (decimal)
-
-For help:
-```bash
-quant-greeks --help
+python put_call_parity.py --call_price <CALL_PRICE> --put_price <PUT_PRICE> --strike_price <STRIKE_PRICE> --interest_rate <INTEREST_RATE> --time_to_maturity <TIME_TO_MATURITY>
 ```
 
 ### Example
+Assuming you have a call option priced at $10, a put option priced at $5, a strike price of $100, an interest rate of 5%, and a time to maturity of 1 year, you would use:
 
 ```bash
-quant-greeks --option_type put --S 95 --K 100 --T 0.5 --r 0.01 --sigma 0.15
+python put_call_parity.py --call_price 10 --put_price 5 --strike_price 100 --interest_rate 0.05 --time_to_maturity 1
 ```
 
----
-
-## Implied Volatility Calculator (New Feature!)
-
-You can now solve for the implied volatility that matches a given market price for a European option:
-
-```bash
-python cli.py --implied_vol --option_type call --S 100 --K 100 --T 1 --r 0.05 --price 10
+### Sample Output
+```plaintext
+Put-Call Parity holds: True
 ```
-
-Where:
-- `--implied_vol`: Activates implied volatility calculation mode
-- `--price`: The market price of the option
-
-This will output:
-```
-Implied volatility: 0.18797
-```
-
----
-
-## Binomial Option Pricing Model
-
-This CLI now supports option pricing using both the Black-Scholes and Binomial models.
-
-### Usage Examples
-
-**Black-Scholes (default):**
-```bash
-python cli.py --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2
-```
-
-**Binomial model (with steps):**
-```bash
-python cli.py --model binomial --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --steps 100
-```
-
-- `--model`: Choose `binomial` or `black-scholes` (default is `black-scholes`)
-- `--steps`: Number of steps for the binomial tree (only used for binomial model; default = 100)
-
-### What’s New
-
-- Add binomial model for European option pricing
-- New CLI arguments: `--model` and `--steps`
-- All previous Black-Scholes functionality remains unchanged
-
----
-
-## Testing
-
-Run all tests with:
-
-```bash
-pytest
-```
-(Requires pytest, included in `requirements.txt`.)
-
----
-
-## Contributing
-
-1. Fork the repo and create your feature branch:
-    ```bash
-git checkout -b feature/YourFeature
-    ```
-2. Commit your changes and push:
-    ```bash
-    git commit -m "Describe your feature"
-    git push origin feature/YourFeature
-    ```
-3. Open a Pull Request.
-
----
-
-## License
-
-MIT License
-
----
-
-## Author
-
-Patience Fuglo
