@@ -162,6 +162,42 @@ If you use `--output csv` and do not specify `--csvfile`, the results will be sa
 - All previous Black-Scholes functionality remains unchanged
 
 ---
+## Greek Sensitivity Table (Parameter Sweep)
+
+You can now analyze how option prices and Greeks (Delta, Gamma, Vega, Theta, Rho) change as you vary a single parameter, such as the spot price (S), volatility (sigma), time to expiry (T), strike (K), risk-free rate (r), or dividend yield (q).
+
+### Usage
+
+```bash
+python cli.py sweep --param <PARAM> --start <START> --end <END> --steps <N> --option_type <call|put> --S <S> --K <K> --T <T> --r <r> --sigma <sigma> [--q <q>] [--output plain|table|csv|json] [--csvfile filename.csv]
+```
+
+- `--param`: Which parameter to sweep (S, K, T, r, sigma, q)
+- `--start`, `--end`: Range for the swept parameter
+- `--steps`: Number of points in the sweep (default: 10)
+- All other option arguments: held constant unless swept
+- `--output`: Output format (`plain`, `table`, `csv`, or `json`)
+- `--csvfile`: CSV file (only needed if `--output csv`)
+
+### Examples
+
+**Sweep spot price S:**
+```bash
+python cli.py sweep --param S --start 80 --end 120 --steps 5 --option_type call --K 100 --T 1 --r 0.05 --sigma 0.2 --output table
+```
+
+**Sweep volatility sigma and get JSON output:**
+```bash
+python cli.py sweep --param sigma --start 0.1 --end 0.5 --steps 5 --option_type call --S 100 --K 100 --T 1 --r 0.05 --output json
+```
+
+**Sweep risk-free rate r and save to CSV:**
+```bash
+python cli.py sweep --param r --start 0.01 --end 0.1 --steps 10 --option_type put --S 100 --K 100 --T 1 --sigma 0.2 --output csv --csvfile sweep_rates.csv
+```
+
+The table output shows the parameter value, price, and all Greeks for each step. JSON and CSV let you use the results for further analysis.
+
 
 ## Testing
 
