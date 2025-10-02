@@ -119,6 +119,15 @@ This works for pricing and all Black-Scholes Greeks!
 - `--model`: Choose `binomial` or `black-scholes` (default is `black-scholes`)
 - `--steps`: Number of steps for the binomial tree (only used for binomial model; default = 100)
 
+
+## Put-Call Parity Checker (New!)
+
+You can now check put-call parity from the CLI:
+
+```bash
+python cli.py parity --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --q 0.03
+```
+
 ### What’s New
 
 - Add binomial model for European option pricing
