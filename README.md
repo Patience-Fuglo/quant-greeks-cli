@@ -294,6 +294,27 @@ put,80,85,0.8,0.02,0.18,0.0,binomial,150,False
 
 The CLI will print a table, write a CSV, or print JSON, depending on your choice. For binomial options, only the price is shown by default.
 
+
+## Binomial Model Greeks
+
+**New:** The CLI now supports Greeks (Delta, Gamma, Vega, Theta, Rho) for the binomial model as well!
+- For European options, binomial Greeks will be close to Black-Scholes for a high number of steps.
+- For American options, only the price is reliable; Greeks are approximate or may be set to `nan`.
+- As a beginner, expect some differences—binomial Greeks are numerically estimated and can be less stable.
+
+---
+
+## Example: Compare Black-Scholes and Binomial Greeks
+
+```bash
+python cli.py price --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --q 0 --model black-scholes --output table
+python cli.py price --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --q 0 --model binomial --steps 200 --output table
+```
+
+Check the results—Greeks for binomial (European) should be reasonably close to Black-Scholes with enough steps.
+
+---
+
 ## Testing
 
 Run all tests with:
