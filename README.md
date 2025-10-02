@@ -2,16 +2,22 @@
 
 ![CI](https://github.com/Patience-Fuglo/quant-greeks-cli/actions/workflows/ci.yml/badge.svg)
 
-A lightweight command-line tool for calculating the five main Black-Scholes Greeks (Delta, Gamma, Vega, Theta, Rho). Designed for traders, quants, and finance students, this tool helps you analyze options risk and sensitivity directly from your terminal.
+A lightweight command-line tool for calculating the five main Black-Scholes Greeks (Delta, Gamma, Vega, Theta, Rho) and pricing options using both the Black-Scholes and Binomial models (supporting European and American styles). Designed for traders, quants, and finance students, this tool helps you analyze risk and price options easily from your terminal.
 
 ---
 
 ## Features
 
-- **Black-Scholes Greeks Calculator:** Computes Delta, Gamma, Vega, Theta, and Rho
-- **Simple CLI:** Run calculations from your terminal with intuitive arguments
-- **100% Test Coverage:** Every calculation is unit tested for accuracy
-- **CI/CD:** Integrated with GitHub Actions for continuous testing and reliability
+- **Black-Scholes Greeks Calculator:** Computes Delta, Gamma, Vega, Theta, and Rho for European options.
+- **Option Pricing Models:**
+  - **Black-Scholes:** Analytical pricing for European options.
+  - **Binomial:** Flexible pricing for both European and American options.
+- **American Option Pricing:** Use the `--american` flag with the binomial model for American-style options.
+- **Customizable Binomial Steps:** Choose tree steps with `--steps` (default 100).
+- **Simple CLI:** Run calculations from your terminal with intuitive arguments.
+- **100% Test Coverage:** Every calculation is unit tested for accuracy.
+- **CI/CD:** Integrated with GitHub Actions for continuous testing and reliability.
+- **Clear Output:** Prices and Greeks are displayed directly in your terminal.
 
 ---
 
@@ -66,6 +72,39 @@ quant-greeks --option_type put --S 95 --K 100 --T 0.5 --r 0.01 --sigma 0.15
 
 ---
 
+## Binomial Option Pricing Model (New Feature!)
+
+This CLI now supports option pricing using both the Black-Scholes and Binomial models, including American-style options.
+
+### Usage Examples
+
+**Black-Scholes (default):**
+```bash
+python cli.py --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2
+```
+
+**Binomial model (with steps, European):**
+```bash
+python cli.py --model binomial --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --steps 100
+```
+
+**Binomial model (American):**
+```bash
+python cli.py --model binomial --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --steps 100 --american
+```
+
+- `--model`: Choose `binomial` or `black-scholes` (default is `black-scholes`)
+- `--steps`: Number of steps for the binomial tree (default = 100)
+- `--american`: Price an American-style option with the binomial model
+
+### What’s New
+
+- Add binomial model for both European **and American** option pricing
+- New CLI arguments: `--model`, `--steps`, and `--american`
+- All previous Black-Scholes functionality remains unchanged
+
+---
+
 ## Testing
 
 Run all tests with:
@@ -76,30 +115,6 @@ pytest
 (Requires pytest, included in `requirements.txt`.)
 
 ---
-## Binomial Option Pricing Model (New Feature!)
-
-This CLI now supports option pricing using both the Black-Scholes and Binomial models.
-
-### Usage Examples
-
-**Black-Scholes (default):**
-```bash
-python cli.py --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2
-```
-
-**Binomial model (with steps):**
-```bash
-python cli.py --model binomial --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --steps 100
-```
-
-- `--model`: Choose `binomial` or `black-scholes` (default is `black-scholes`)
-- `--steps`: Number of steps for the binomial tree (only used for binomial model; default = 100)
-
-### What’s New
-
-- Add binomial model for European option pricing
-- New CLI arguments: `--model` and `--steps`
-- All previous Black-Scholes functionality remains unchanged
 
 ## Contributing
 
