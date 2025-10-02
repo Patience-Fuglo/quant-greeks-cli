@@ -270,11 +270,28 @@ Open `htmlcov/index.html` for details.
 
 ---
 
+
 ## Contributing
 
 Pull requests are welcome! Please add tests for any new features and follow the standard fork/branch/PR workflow.
 
 ---
+
+## PyPI Packaging & Build Status
+
+This project is now fully packaged with modern Python standards (`pyproject.toml`).  
+- All CLI entry points are defined in `[project.scripts]` in `pyproject.toml`
+- Build artifacts (`.whl`, `.tar.gz`) are created cleanly with zero errors or deprecated configuration
+- Packaging process tested and ready for PyPI publication
+
+To build locally:
+```bash
+python -m build
+```
+To install from the wheel:
+```bash
+pip install dist/quant_greeks_cli-0.1.0-py3-none-any.whl
+```
 
 ## License
 
