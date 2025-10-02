@@ -1,59 +1,141 @@
-## Put-Call Parity CLI Feature
+# Quant Greeks CLI Tool
 
-### Overview
-The Put-Call Parity Checker allows users to verify the relationship between put and call options, ensuring that arbitrage opportunities do not exist in the market.
+![CI](https://github.com/Patience-Fuglo/quant-greeks-cli/actions/workflows/ci.yml/badge.svg)
 
-### Usage
-To use the Put-Call Parity Checker, run the following command:
+A lightweight command-line tool for calculating option prices and Greeks using Black-Scholes and Binomial models. Built for traders, quants, and finance students to analyze options risk and sensitivity directly from your terminal.
 
+---
+
+## Features
+
+- **Comprehensive Greeks:** Delta, Gamma, Vega, Theta, Rho for Black-Scholes and Binomial (European/American)
+- **Flexible Option Pricing:** Black-Scholes and Binomial models with American/European support
+- **Implied Volatility Solver:** Calculate implied volatility given a market price
+- **Dividend Yield Support:** Pass continuous dividend yield with `--q`
+- **Batch/Portfolio Processing:** Process CSV/JSON and output table, CSV, or JSON
+- **Parameter Sweep & Plotting:** Analyze/visualize how Greeks change with any parameter and save as tables, CSV, JSON, or PNG plot
+- **Put-Call Parity Checker:** Verify arbitrage-free pricing with a simple CLI command
+- **Robust CLI & Error Handling:** Helpful messages, input validation, and usage hints
+- **100% Test Coverage:** Core logic thoroughly tested, including CLI behaviors
+- **CI/CD:** GitHub Actions for continuous integration
+
+---
+
+## Installation
+
+From PyPI:
 ```bash
-python put_call_parity.py --call_price <CALL_PRICE> --put_price <PUT_PRICE> --strike_price <STRIKE_PRICE> --interest_rate <INTEREST_RATE> --time_to_maturity <TIME_TO_MATURITY>
+pip install quant-greeks-cli
+```
+Or from source:
+```bash
+git clone https://github.com/Patience-Fuglo/quant-greeks-cli.git
+cd quant-greeks-cli
+pip install -r requirements.txt
+pip install .
 ```
 
-### Example
-Assuming you have a call option priced at $10, a put option priced at $5, a strike price of $100, an interest rate of 5%, and a time to maturity of 1 year, you would use:
+---
 
+## Usage
+
+Basic Greeks calculation:
 ```bash
-python put_call_parity.py --call_price 10 --put_price 5 --strike_price 100 --interest_rate 0.05 --time_to_maturity 1
+quant-greeks --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2
+```
+For help:
+```bash
+quant-greeks --help
 ```
 
-### Sample Output
-```plaintext
+### Option Argument Guide
+
+- `--option_type`: "call" or "put"
+- `--S`: Spot price
+- `--K`: Strike price
+- `--T`: Time to maturity (years)
+- `--r`: Annual risk-free rate (decimal)
+- `--sigma`: Volatility (decimal)
+- `--q`: Continuous dividend yield (optional, default 0)
+
+---
+
+## Example Features
+
+- **Implied Volatility Calculation:**
+  ```bash
+  python cli.py --implied_vol --option_type call --S 100 --K 100 --T 1 --r 0.05 --price 10
+  ```
+  Output:
+  ```
+  Implied volatility: 0.18797
+  ```
+- **Binomial Pricing (with American support):**
+  ```bash
+  python cli.py --model binomial --option_type put --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --steps 200 --american
+  ```
+- **Pretty table/CSV/JSON/plot outputs**
+- **Parameter sweep:**
+  ```bash
+  python cli.py sweep --param S --start 80 --end 120 --steps 5 --option_type call --K 100 --T 1 --r 0.05 --sigma 0.2 --output plot --plot_metric delta
+  ```
+  - `--output plot`: Save a PNG file (`plot.png`) of the sweep result in your working directory.
+  - `--plot_metric`: Metric to plot on the y-axis (price, delta, gamma, vega, theta, rho).
+
+- **Portfolio/batch processing:**
+  ```bash
+  python cli.py batch --file my_options.csv --output table
+  ```
+
+**Supported models and parameters:**
+- `--model`: Choose `binomial` (default: `black-scholes`)
+- `--steps`: Number of steps for binomial (default: 100)
+- `--american`: Enable American-style exercise for binomial pricing
+
+---
+
+## Put-Call Parity Checker
+
+You can check put-call parity directly from the CLI:
+
+```bash
+python cli.py parity --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --q 0.03
+```
+**Sample Output**
+```
 Put-Call Parity holds: True
 ```
 
-## Plotting Sweep Results
+---
 
-You can now generate and save plots of option price or any Greek as you sweep a parameter! This feature uses matplotlib and is available via the CLI.
+## Output Formats
 
-### Usage
+Choose how results are displayed or saved:
 
-To plot, use the `--output plot` option with the `sweep` subcommand, and optionally specify which metric to plot with `--plot_metric`.
-
-```bash
-python cli.py sweep --param <PARAM> --start <START> --end <END> --steps <N> --option_type <call|put> --S <S> --K <K> --T <T> --r <r> --sigma <sigma> [--q <q>] --output plot [--plot_metric <price|delta|gamma|vega|theta|rho>]
-```
-
-- `--output plot`: Save the plot as a PNG (`plot.png`) in your current directory.
-- `--plot_metric`: Which metric to plot on the y-axis (default: price).
+- **plain** (default): One result per line
+- **table**: Formatted terminal table
+- **csv**: Save results for further analysis
+- **json**: Machine-readable output
+- **plot**: Save parameter sweep as PNG
 
 ### Examples
 
-**Plot how Delta changes with the spot price:**
+**Pretty table:**
 ```bash
-python cli.py sweep --param S --start 80 --end 120 --steps 10 --option_type call --K 100 --T 1 --r 0.05 --sigma 0.2 --output plot --plot_metric delta
+python cli.py price --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --output table
 ```
 
-**Plot Vega as you vary volatility:**
+**CSV export:**
 ```bash
-python cli.py sweep --param sigma --start 0.1 --end 0.5 --steps 10 --option_type put --S 100 --K 100 --T 1 --r 0.05 --output plot --plot_metric vega
+python cli.py price --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --output csv --csvfile myresults.csv
 ```
 
-### Output
+**Classic (plain):**
+```bash
+python cli.py price --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2
+```
 
-When you run a sweep with `--output plot`, a file named `plot.png` will be saved to your working directory. Open this file to view your chart. (If you're running in a remote or headless setup, download the file to your local machine to view.)
-
-**Note:** You must have matplotlib installed (`pip install matplotlib`).
+---
 
 ## Batch/Portfolio Processing
 
@@ -89,6 +171,89 @@ put,80,85,0.8,0.02,0.18,0.0,binomial,150,False
 ]
 ```
 
+---
+
+## Parameter Sweep & Plotting
+
+You can analyze how Greeks and prices change as you vary a single parameter, and visualize the results.
+
+### Usage
+
+```bash
+python cli.py sweep --param <PARAM> --start <START> --end <END> --steps <N> --option_type <call|put> --S <S> --K <K> --T <T> --r <r> --sigma <sigma> [--q <q>] --output plot --plot_metric price
+```
+
+- `--param`: S, K, T, r, sigma, or q
+- `--plot_metric`: price, delta, gamma, vega, theta, or rho
+
 ### Output
 
-The CLI will print a table, write a CSV, or print JSON, depending on your choice.
+- PNG plot saved to `plot.png`
+- Table, CSV, or JSON output for further analysis
+
+---
+
+## Error Handling
+
+Smart error messages for:
+- Missing/invalid arguments or parameter combinations
+- Incompatible option/model settings
+- Required parameters for implied volatility or sweep
+- File format validation for batch mode
+
+**Examples:**
+```bash
+python cli.py price --option_type call --S -100 --K 100 --T 1 --r 0.05 --sigma 0.2
+# Error(s): Stock price S must be positive.
+
+python cli.py price --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --model black-scholes --american
+# Error(s): Black-Scholes model does not support American options. Use binomial model with --american.
+```
+
+---
+
+## Testing
+
+Run all tests using:
+```bash
+pytest
+```
+Check coverage:
+```bash
+pytest --cov=.
+```
+Generate HTML report:
+```bash
+pytest --cov=. --cov-report=html
+```
+Open `htmlcov/index.html` for details.
+
+### Test Coverage
+
+- All core logic for pricing and Greeks is tested, including edge cases and American options.
+- CLI behaviors (such as help and error messages) are included using subprocess.
+- Example test files:
+  - `tests/test_binomial.py` (European and American, edge/exception cases)
+  - `tests/test_black_scholes.py` (normal and error branches)
+  - `tests/test_greeks.py` (normal and error branches)
+  - `tests/test_implied_vol.py` (normal and error branches)
+  - `tests/test_cli.py` (CLI help and error response)
+- CLI code itself is not directly unit tested, but its output and error handling are verified through CLI tests.
+
+---
+
+## Contributing
+
+Pull requests are welcome! Please add tests for any new features and follow the standard fork/branch/PR workflow.
+
+---
+
+## License
+
+MIT License
+
+---
+
+## Author
+
+Patience Fuglo
