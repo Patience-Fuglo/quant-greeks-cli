@@ -128,6 +128,33 @@ You can now check put-call parity from the CLI:
 python cli.py parity --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --q 0.03
 ```
 
+## Output Formats: Table and CSV (New!)
+
+You can now choose how your results are displayed or saved using the `--output` flag:
+
+- **Plain (default):** One result per line (classic style)
+- **Table:** Nicely formatted table in the terminal
+- **CSV:** Save results for further analysis
+
+### Examples
+
+**Pretty table:**
+```bash
+python cli.py price --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --output table
+```
+
+**CSV export:**
+```bash
+python cli.py price --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --output csv --csvfile myresults.csv
+```
+
+**Classic (plain):**
+```bash
+python cli.py price --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2
+```
+
+If you use `--output csv` and do not specify `--csvfile`, the results will be saved to `output.csv` by default.
+
 ### What’s New
 
 - Add binomial model for European option pricing
