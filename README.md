@@ -9,6 +9,8 @@ A lightweight command-line tool for calculating the five main Black-Scholes Gree
 ## Features
 
 - **Black-Scholes Greeks Calculator:** Computes Delta, Gamma, Vega, Theta, and Rho
+- **Binomial and Black-Scholes Option Pricing:** Supports both models; Binomial supports American and European options
+- **Implied Volatility Calculator:** Computes the implied volatility given a market price for a European option
 - **Simple CLI:** Run calculations from your terminal with intuitive arguments
 - **100% Test Coverage:** Every calculation is unit tested for accuracy
 - **CI/CD:** Integrated with GitHub Actions for continuous testing and reliability
@@ -66,17 +68,26 @@ quant-greeks --option_type put --S 95 --K 100 --T 0.5 --r 0.01 --sigma 0.15
 
 ---
 
-## Testing
+## Implied Volatility Calculator (New Feature!)
 
-Run all tests with:
+You can now solve for the implied volatility that matches a given market price for a European option:
 
 ```bash
-pytest
+python cli.py --implied_vol --option_type call --S 100 --K 100 --T 1 --r 0.05 --price 10
 ```
-(Requires pytest, included in `requirements.txt`.)
+
+Where:
+- `--implied_vol`: Activates implied volatility calculation mode
+- `--price`: The market price of the option
+
+This will output:
+```
+Implied volatility: 0.18797
+```
 
 ---
-## Binomial Option Pricing Model (New Feature!)
+
+## Binomial Option Pricing Model
 
 This CLI now supports option pricing using both the Black-Scholes and Binomial models.
 
@@ -101,11 +112,24 @@ python cli.py --model binomial --option_type call --S 100 --K 100 --T 1 --r 0.05
 - New CLI arguments: `--model` and `--steps`
 - All previous Black-Scholes functionality remains unchanged
 
+---
+
+## Testing
+
+Run all tests with:
+
+```bash
+pytest
+```
+(Requires pytest, included in `requirements.txt`.)
+
+---
+
 ## Contributing
 
 1. Fork the repo and create your feature branch:
     ```bash
-    git checkout -b feature/YourFeature
+git checkout -b feature/YourFeature
     ```
 2. Commit your changes and push:
     ```bash
