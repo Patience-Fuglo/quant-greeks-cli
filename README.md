@@ -293,6 +293,22 @@ To install from the wheel:
 pip install dist/quant_greeks_cli-0.1.0-py3-none-any.whl
 ```
 
+## PyPI Release
+
+[![PyPI version](https://img.shields.io/pypi/v/quant-greeks-cli.svg)](https://pypi.org/project/quant-greeks-cli/)
+
+This package is available on [PyPI](https://pypi.org/project/quant-greeks-cli/).
+
+**Install via pip:**
+```bash
+pip install quant-greeks-cli
+```
+
+**Usage:**
+```bash
+quant-greeks-cli --help
+```
+
 ## License
 
 MIT License
