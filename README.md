@@ -198,6 +198,29 @@ python cli.py sweep --param r --start 0.01 --end 0.1 --steps 10 --option_type pu
 
 The table output shows the parameter value, price, and all Greeks for each step. JSON and CSV let you use the results for further analysis.
 
+## Robust Error Handling and User Hints
+
+The CLI now features robust input validation and helpful error messages for common mistakes, such as:
+- Missing required arguments (e.g., missing `--sigma` for Black-Scholes)
+- Invalid values (e.g., negative prices or time)
+- Contradictory arguments (e.g., American + Black-Scholes)
+- Sweep mode missing a required fixed parameter
+- Implied volatility calculation without a `--price`
+- And more!
+
+**Examples:**
+```bash
+python cli.py price --option_type call --S -100 --K 100 --T 1 --r 0.05 --sigma 0.2
+# Error(s): Stock price S must be positive.
+
+python cli.py price --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --model black-scholes --american
+# Error(s): Black-Scholes model does not support American options. Use binomial model with --american.
+
+python cli.py price --option_type call --S 100 --K 100 --T 1 --r 0.05 --implied_vol
+# Error(s): Implied volatility calculation requires --price (market price).
+```
+
+Whenever a problem is detected, the CLI tells you what’s wrong and suggests a fix or refers you to `--help`.
 
 ## Testing
 
