@@ -222,6 +222,40 @@ python cli.py price --option_type call --S 100 --K 100 --T 1 --r 0.05 --implied_
 
 Whenever a problem is detected, the CLI tells you what’s wrong and suggests a fix or refers you to `--help`.
 
+## Plotting Sweep Results
+
+You can now generate and save plots of option price or any Greek as you sweep a parameter! This feature uses matplotlib and is available via the CLI.
+
+### Usage
+
+To plot, use the `--output plot` option with the `sweep` subcommand, and optionally specify which metric to plot with `--plot_metric`.
+
+```bash
+python cli.py sweep --param <PARAM> --start <START> --end <END> --steps <N> --option_type <call|put> --S <S> --K <K> --T <T> --r <r> --sigma <sigma> [--q <q>] --output plot [--plot_metric <price|delta|gamma|vega|theta|rho>]
+```
+
+- `--output plot`: Save the plot as a PNG (`plot.png`) in your current directory.
+- `--plot_metric`: Which metric to plot on the y-axis (default: price).
+
+### Examples
+
+**Plot how Delta changes with the spot price:**
+```bash
+python cli.py sweep --param S --start 80 --end 120 --steps 10 --option_type call --K 100 --T 1 --r 0.05 --sigma 0.2 --output plot --plot_metric delta
+```
+
+**Plot Vega as you vary volatility:**
+```bash
+python cli.py sweep --param sigma --start 0.1 --end 0.5 --steps 10 --option_type put --S 100 --K 100 --T 1 --r 0.05 --output plot --plot_metric vega
+```
+
+### Output
+
+When you run a sweep with `--output plot`, a file named `plot.png` will be saved to your working directory. Open this file to view your chart. (If you're running in a remote or headless setup, download the file to your local machine to view.)
+
+**Note:** You must have matplotlib installed (`pip install matplotlib`).
+
+
 ## Testing
 
 Run all tests with:
