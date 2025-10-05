@@ -1,21 +1,56 @@
-[project]
-name = "quant-greeks-cli"
-version = "0.1.0"
-description = "A CLI tool for option pricing and Greeks calculation"
-authors = [
-    { name="Patience Fuglo", email="your.email@example.com" }
-]
-readme = "README.md"
-license = "MIT"
-requires-python = ">=3.7"
-dependencies = [
-    "numpy>=1.21",
-    "scipy>=1.7"
-]
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "Operating System :: OS Independent"
-]
+name: Python package
 
-[project.scripts]
-quant-greeks-cli = "quant_greeks_cli.cli:main"
+on:
+  push:
+    branches: [ main, develop, feature/* ]
+  pull_request:
+    branches: [ main, develop, feature/* ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: [3.9, 3.10, 3.11]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        if [ -f pyproject.toml ]; then pip install .; fi
+        pip install pytest pytest-cov
+
+    - name: Run tests with coverage
+      run: |
+        pytest --cov=. --cov-report=xml
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        files: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
+
+    - name: Generate coverage badge (optional)
+      if: always()
+      run: |
+        pip install coverage-badge
+        coverage-badge -o coverage.svg -f
+
+    - name: Upload coverage badge (optional)
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-badge
+        path: coverage.svg

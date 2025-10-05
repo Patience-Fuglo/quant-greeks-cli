@@ -2,6 +2,8 @@
 
 ![CI](https://github.com/Patience-Fuglo/quant-greeks-cli/actions/workflows/ci.yml/badge.svg)
 
+
+
 A lightweight command-line tool for calculating option prices and Greeks using Black-Scholes and Binomial models. Built for traders, quants, and finance students to analyze options risk and sensitivity directly from your terminal.
 
 ---

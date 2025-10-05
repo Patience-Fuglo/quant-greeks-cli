@@ -1,4 +1,5 @@
 from math import exp, sqrt, isclose
+
 def binomial_option_pricing(
     S, K, T, r, sigma, steps, option_type, american=False, q=0.0, return_greeks=False
 ):
@@ -44,60 +45,57 @@ def binomial_option_pricing(
     if not return_greeks:
         return price
 
-    # For American options, set Greeks to nan for now
-    if american:
-        nan = float("nan")
-        return price, nan, nan, nan, nan, nan
-
-    # ---- Greeks Calculation (European only) ----
-    # Clamp finite difference steps
-    dS = 1.0
-    dSigma = 0.01
-    dT = 1/365  # 1 day
+    # ---- Greeks Calculation (Finite Difference: Works for Euro & American) ----
+    dS = max(1.0, S * 0.01)
+    dSigma = max(0.01, sigma * 0.02)
+    dT = min(1/365, T/50)  # 1 day or smaller for short maturities
     dR = 0.0001
 
-    # Delta
-    S_up, S_down = S + dS, S - dS
+    # Defensive: clamp to positive
+    S_up = S + dS
+    S_down = max(1e-8, S - dS)
+    sigma_up = sigma + dSigma
+    sigma_down = max(1e-8, sigma - dSigma)
+    T_up = T + dT
+    T_down = max(1e-8, T - dT)
+    r_up = r + dR
+    r_down = r - dR
+
+    # Price for Greeks
     try:
         price_up = binomial_option_pricing(S_up, K, T, r, sigma, steps, option_type, american, q)
         price_down = binomial_option_pricing(S_down, K, T, r, sigma, steps, option_type, american, q)
-        delta = (price_up - price_down) / (2 * dS) if not isclose(S_up, S_down) else float("nan")
+        delta = (price_up - price_down) / (S_up - S_down)
     except Exception:
         delta = float("nan")
 
-    # Gamma
     try:
-        price_upup = binomial_option_pricing(S + dS, K, T, r, sigma, steps, option_type, american, q)
-        price = binomial_option_pricing(S, K, T, r, sigma, steps, option_type, american, q)
-        price_downdown = binomial_option_pricing(S - dS, K, T, r, sigma, steps, option_type, american, q)
-        gamma = (price_upup - 2 * price + price_downdown) / (dS ** 2)
+        price_upup = binomial_option_pricing(S_up, K, T, r, sigma, steps, option_type, american, q)
+        price_mid = price
+        price_downdown = binomial_option_pricing(S_down, K, T, r, sigma, steps, option_type, american, q)
+        gamma = (price_upup - 2 * price_mid + price_downdown) / ((0.5 * (S_up - S_down)) ** 2)
     except Exception:
         gamma = float("nan")
 
-    # Vega (w.r.t. sigma)
     try:
-        price_sigma_up = binomial_option_pricing(S, K, T, r, sigma + dSigma, steps, option_type, american, q)
-        price_sigma_down = binomial_option_pricing(S, K, T, r, sigma - dSigma, steps, option_type, american, q)
-        vega = (price_sigma_up - price_sigma_down) / (2 * dSigma)
+        price_sigma_up = binomial_option_pricing(S, K, T, r, sigma_up, steps, option_type, american, q)
+        price_sigma_down = binomial_option_pricing(S, K, T, r, sigma_down, steps, option_type, american, q)
+        vega = (price_sigma_up - price_sigma_down) / (sigma_up - sigma_down)
     except Exception:
         vega = float("nan")
 
-    # Theta (w.r.t. T)
     try:
-        T_up = max(T + dT, 1e-8)
-        T_down = max(T - dT, 1e-8)
         price_T_up = binomial_option_pricing(S, K, T_up, r, sigma, steps, option_type, american, q)
         price_T_down = binomial_option_pricing(S, K, T_down, r, sigma, steps, option_type, american, q)
-        theta = (price_T_down - price_T_up) / (2 * dT)
+        theta = (price_T_down - price_T_up) / (T_down - T_up)
     except Exception:
         theta = float("nan")
 
-    # Rho (w.r.t. r)
     try:
-        price_r_up = binomial_option_pricing(S, K, T, r + dR, sigma, steps, option_type, american, q)
-        price_r_down = binomial_option_pricing(S, K, T, r - dR, sigma, steps, option_type, american, q)
-        rho = (price_r_up - price_r_down) / (2 * dR)
+        price_r_up = binomial_option_pricing(S, K, T, r_up, sigma, steps, option_type, american, q)
+        price_r_down = binomial_option_pricing(S, K, T, r_down, sigma, steps, option_type, american, q)
+        rho = (price_r_up - price_r_down) / (r_up - r_down)
     except Exception:
         rho = float("nan")
 
-    return price, delta, gamma, vega, theta, rho
+    return price, delta, gamma, vega, theta, rhs
