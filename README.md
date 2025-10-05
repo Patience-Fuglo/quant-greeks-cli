@@ -277,6 +277,97 @@ Pull requests are welcome! Please add tests for any new features and follow the 
 
 ---
 
+
+
+## Advanced Analytics & Reporting
+
+The CLI supports advanced analytics and reporting for batch and portfolio processing:
+
+- Aggregate Greeks and price across a portfolio
+- Output in multiple formats for easy downstream analysis
+- CSV/JSON outputs are suitable for import into Excel, pandas, or BI tools
+- Real-time summary in terminal (table/plain)
+- Use parameter sweeps and plot outputs to visualize sensitivity and risk
+
+Example advanced batch command:
+
+```bash
+python cli.py batch --file my_options.csv --output csv --csvfile portfolio_report.csv
+```
+
+This command processes your entire options portfolio, calculates prices and Greeks, and exports a full report to `portfolio_report.csv`.
+
+---
+
+## Parameter Sweep & Plotting
+
+You can analyze how Greeks and prices change as you vary a single parameter, and visualize the results.
+
+### Usage
+
+```bash
+python cli.py sweep --param <PARAM> --start <START> --end <END> --steps <N> --option_type <call|put> --S <S> --K <K> --T <T> --r <r> --sigma <sigma> [--q <q>] --output plot --plot_metric price
+```
+
+- `--param`: S, K, T, r, sigma, or q
+- `--plot_metric`: price, delta, gamma, vega, theta, or rho
+
+### Output
+
+- PNG plot saved to `plot.png`
+- Table, CSV, or JSON output for further analysis
+
+---
+
+## Error Handling
+
+Smart error messages for:
+- Missing/invalid arguments or parameter combinations
+- Incompatible option/model settings
+- Required parameters for implied volatility or sweep
+- File format validation for batch mode
+
+**Examples:**
+```bash
+python cli.py price --option_type call --S -100 --K 100 --T 1 --r 0.05 --sigma 0.2
+# Error(s): Stock price S must be positive.
+
+python cli.py price --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --model black-scholes --american
+# Error(s): Black-Scholes model does not support American options. Use binomial model with --american.
+```
+
+---
+
+## Testing
+
+Run all tests using:
+```bash
+pytest
+```
+Check coverage:
+```bash
+pytest --cov=.
+```
+Generate HTML report:
+```bash
+pytest --cov=. --cov-report=html
+```
+Open `htmlcov/index.html` for details.
+
+### Test Coverage
+
+- All core logic for pricing and Greeks is tested, including edge cases and American options.
+- CLI behaviors (such as help and error messages) are included using subprocess.
+- Example test files:
+  - `tests/test_binomial.py` (European and American, edge/exception cases)
+  - `tests/test_black_scholes.py` (normal and error branches)
+  - `tests/test_greeks.py` (normal and error branches)
+  - `tests/test_implied_vol.py` (normal and error branches)
+  - `tests/test_cli.py` (CLI help and error response)
+- CLI code itself is not directly unit tested, but its output and error handling are verified through CLI tests.
+
+---
+
 ## PyPI Packaging & Build Status
 
 This project is now fully packaged with modern Python standards (`pyproject.toml`).  
