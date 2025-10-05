@@ -367,6 +367,14 @@ Open `htmlcov/index.html` for details.
 - CLI code itself is not directly unit tested, but its output and error handling are verified through CLI tests.
 
 ---
+## Planned Extensions
+
+- **REST API**: Will provide programmatic access to all option pricing features (`python cli.py api`)
+- **GUI**: A graphical interface for interactive use (`python cli.py gui`)
+- **Interactive CLI**: A REPL or prompt-toolkit CLI (`python cli.py interactive`)
+
+*These are not yet implemented, but you can see the extension points in the CLI code.*
+
 
 ## PyPI Packaging & Build Status
 
