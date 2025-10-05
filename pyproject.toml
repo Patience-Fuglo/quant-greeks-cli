@@ -1,0 +1,21 @@
+[project]
+name = "quant-greeks-cli"
+version = "0.1.0"
+description = "A CLI tool for option pricing and Greeks calculation"
+authors = [
+    { name="Patience Fuglo", email="your.email@example.com" }
+]
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.7"
+dependencies = [
+    "numpy>=1.21",
+    "scipy>=1.7"
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent"
+]
+
+[project.scripts]
+quant-greeks-cli = "quant_greeks_cli.cli:main"
