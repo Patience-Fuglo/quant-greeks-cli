@@ -1,8 +1,7 @@
 # Quant Greeks CLI Tool
 
 ![CI](https://github.com/Patience-Fuglo/quant-greeks-cli/actions/workflows/ci.yml/badge.svg)
-
-
+[![PyPI version](https://img.shields.io/pypi/v/quant-greeks-cli.svg)](https://pypi.org/project/quant-greeks-cli/)
 
 A lightweight command-line tool for calculating option prices and Greeks using Black-Scholes and Binomial models. Built for traders, quants, and finance students to analyze options risk and sensitivity directly from your terminal.
 
@@ -11,7 +10,7 @@ A lightweight command-line tool for calculating option prices and Greeks using B
 ## Features
 
 - **Comprehensive Greeks:** Delta, Gamma, Vega, Theta, Rho for Black-Scholes and Binomial (European/American)
-- **Flexible Option Pricing:** Black-Scholes and Binomial models with American/European support
+- **Flexible Option Pricing:** Black-Scholes and Binomial models, with American/European support
 - **Implied Volatility Solver:** Calculate implied volatility given a market price
 - **Dividend Yield Support:** Pass continuous dividend yield with `--q`
 - **Batch/Portfolio Processing:** Process CSV/JSON and output table, CSV, or JSON
@@ -43,11 +42,11 @@ pip install .
 
 Basic Greeks calculation:
 ```bash
-quant-greeks --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2
+quant-greeks-cli --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2
 ```
 For help:
 ```bash
-quant-greeks --help
+quant-greeks-cli --help
 ```
 
 ### Option Argument Guide
@@ -66,7 +65,7 @@ quant-greeks --help
 
 - **Implied Volatility Calculation:**
   ```bash
-  python cli.py --implied_vol --option_type call --S 100 --K 100 --T 1 --r 0.05 --price 10
+  quant-greeks-cli --implied_vol --option_type call --S 100 --K 100 --T 1 --r 0.05 --price 10
   ```
   Output:
   ```
@@ -74,36 +73,35 @@ quant-greeks --help
   ```
 - **Binomial Pricing (with American support):**
   ```bash
-  python cli.py --model binomial --option_type put --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --steps 200 --american
+  quant-greeks-cli --model binomial --option_type put --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --steps 200 --american
   ```
-- **Pretty table/CSV/JSON/plot outputs**
 - **Parameter sweep:**
   ```bash
-  python cli.py sweep --param S --start 80 --end 120 --steps 5 --option_type call --K 100 --T 1 --r 0.05 --sigma 0.2 --output plot --plot_metric delta
+  quant-greeks-cli sweep --param S --start 80 --end 120 --steps 5 --option_type call --K 100 --T 1 --r 0.05 --sigma 0.2 --output plot --plot_metric delta
   ```
-  - `--output plot`: Save a PNG file (`plot.png`) of the sweep result in your working directory.
+  - `--output plot`: Save a PNG file (`plot.png`) of the sweep result.
   - `--plot_metric`: Metric to plot on the y-axis (price, delta, gamma, vega, theta, rho).
 
 - **Portfolio/batch processing:**
   ```bash
-  python cli.py batch --file my_options.csv --output table
+  quant-greeks-cli batch --file my_options.csv --output table
   ```
 
-**Supported models and parameters:**
-- `--model`: Choose `binomial` (default: `black-scholes`)
-- `--steps`: Number of steps for binomial (default: 100)
-- `--american`: Enable American-style exercise for binomial pricing
+- **Supported models and parameters:**
+  - `--model`: Choose `binomial` (default: `black-scholes`)
+  - `--steps`: Number of steps for binomial (default: 100)
+  - `--american`: Enable American-style exercise for binomial pricing
 
 ---
 
 ## Put-Call Parity Checker
 
-You can check put-call parity directly from the CLI:
+Check put-call parity directly from the CLI:
 
 ```bash
-python cli.py parity --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --q 0.03
+quant-greeks-cli parity --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --q 0.03
 ```
-**Sample Output**
+Sample Output:
 ```
 Put-Call Parity holds: True
 ```
@@ -124,30 +122,30 @@ Choose how results are displayed or saved:
 
 **Pretty table:**
 ```bash
-python cli.py price --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --output table
+quant-greeks-cli price --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --output table
 ```
 
 **CSV export:**
 ```bash
-python cli.py price --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --output csv --csvfile myresults.csv
+quant-greeks-cli price --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --output csv --csvfile myresults.csv
 ```
 
 **Classic (plain):**
 ```bash
-python cli.py price --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2
+quant-greeks-cli price --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2
 ```
 
 ---
 
 ## Batch/Portfolio Processing
 
-You can process multiple options at once from a CSV or JSON file using the `batch` subcommand.
+Process multiple options at once from a CSV or JSON file using the `batch` subcommand.
 
 ### Usage
 
 ```bash
-python cli.py batch --file my_options.csv --output table
-python cli.py batch --file my_options.json --output csv
+quant-greeks-cli batch --file my_options.csv --output table
+quant-greeks-cli batch --file my_options.json --output csv
 ```
 
 - Replace `my_options.csv` or `my_options.json` with your file path.
@@ -182,7 +180,7 @@ You can analyze how Greeks and prices change as you vary a single parameter, and
 ### Usage
 
 ```bash
-python cli.py sweep --param <PARAM> --start <START> --end <END> --steps <N> --option_type <call|put> --S <S> --K <K> --T <T> --r <r> --sigma <sigma> [--q <q>] --output plot --plot_metric price
+quant-greeks-cli sweep --param <PARAM> --start <START> --end <END> --steps <N> --option_type <call|put> --S <S> --K <K> --T <T> --r <r> --sigma <sigma> [--q <q>] --output plot --plot_metric price
 ```
 
 - `--param`: S, K, T, r, sigma, or q
@@ -194,35 +192,30 @@ python cli.py sweep --param <PARAM> --start <START> --end <END> --steps <N> --op
 - Table, CSV, or JSON output for further analysis
 
 ---
+
 ## Advanced Testing and Coverage
 
-This project includes a robust suite of automated tests, reflecting best practices in quantitative finance software development:
+This project includes a robust suite of automated tests reflecting best practices in quantitative finance software development:
 
-- **Comprehensive Unit and Integration Testing:**  
-  All core option pricing functions (binomial, Black-Scholes, Greeks) are covered with a range of tests, including edge cases such as zero volatility, American vs. European options, and invalid parameter handling.
-
-- **CLI and Batch Testing:**  
-  The command-line interface is tested end-to-end for batch processing, file I/O, and user error handling.
-
+- **Comprehensive Unit and Integration Testing** for all core option pricing functions (binomial, Black-Scholes, Greeks), including edge cases such as zero volatility, American vs. European options, and invalid parameter handling.
+- **CLI and Batch Testing:** End-to-end CLI tests for batch processing, file I/O, and user error handling.
 - **Substantial Code Coverage:**  
-  Recent test runs demonstrate major improvements in coverage:
   - **binomial.py:** Coverage increased from 3% to 85%
   - **greeks.py:** Coverage increased from 22% to 69%
-  - **All 14 tests pass**, and the coverage report is now a meaningful indicator of code reliability.
-
+  - **All 14 tests pass**; coverage is now a meaningful indicator of code reliability.
 - **Continuous Improvement:**  
-  Tests are designed to make it easy to add new models and features with confidence. Coverage reports guide further development and ensure that new code is tested.
-
+  Tests are designed for easy extension and new model integration.
 - **Tools Used:**  
   - `pytest` for test execution
   - `pytest-cov` for coverage measurement
 
 **Result:**  
-This testing approach ensures that the codebase is reliable, maintainable, and ready for professional quantitative finance workflows. 
+The codebase is reliable, maintainable, and ready for professional quantitative finance workflows.
+
+*See the `/tests` directory and the latest coverage report for details, or run `pytest --cov=.` to check coverage yourself.*
 
 ---
 
-*See the `/tests` directory and the latest coverage report for details, or run `pytest --cov=.` to check coverage yourself.*
 ## Error Handling
 
 Smart error messages for:
@@ -233,10 +226,10 @@ Smart error messages for:
 
 **Examples:**
 ```bash
-python cli.py price --option_type call --S -100 --K 100 --T 1 --r 0.05 --sigma 0.2
+quant-greeks-cli price --option_type call --S -100 --K 100 --T 1 --r 0.05 --sigma 0.2
 # Error(s): Stock price S must be positive.
 
-python cli.py price --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --model black-scholes --american
+quant-greeks-cli price --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --model black-scholes --american
 # Error(s): Black-Scholes model does not support American options. Use binomial model with --american.
 ```
 
@@ -272,14 +265,11 @@ Open `htmlcov/index.html` for details.
 
 ---
 
-
 ## Contributing
 
 Pull requests are welcome! Please add tests for any new features and follow the standard fork/branch/PR workflow.
 
 ---
-
-
 
 ## Advanced Analytics & Reporting
 
@@ -294,95 +284,28 @@ The CLI supports advanced analytics and reporting for batch and portfolio proces
 Example advanced batch command:
 
 ```bash
-python cli.py batch --file my_options.csv --output csv --csvfile portfolio_report.csv
+quant-greeks-cli batch --file my_options.csv --output csv --csvfile portfolio_report.csv
 ```
 
-This command processes your entire options portfolio, calculates prices and Greeks, and exports a full report to `portfolio_report.csv`.
+This processes your entire options portfolio, calculates prices and Greeks, and exports a full report to `portfolio_report.csv`.
 
 ---
 
-## Parameter Sweep & Plotting
-
-You can analyze how Greeks and prices change as you vary a single parameter, and visualize the results.
-
-### Usage
-
-```bash
-python cli.py sweep --param <PARAM> --start <START> --end <END> --steps <N> --option_type <call|put> --S <S> --K <K> --T <T> --r <r> --sigma <sigma> [--q <q>] --output plot --plot_metric price
-```
-
-- `--param`: S, K, T, r, sigma, or q
-- `--plot_metric`: price, delta, gamma, vega, theta, or rho
-
-### Output
-
-- PNG plot saved to `plot.png`
-- Table, CSV, or JSON output for further analysis
-
----
-
-## Error Handling
-
-Smart error messages for:
-- Missing/invalid arguments or parameter combinations
-- Incompatible option/model settings
-- Required parameters for implied volatility or sweep
-- File format validation for batch mode
-
-**Examples:**
-```bash
-python cli.py price --option_type call --S -100 --K 100 --T 1 --r 0.05 --sigma 0.2
-# Error(s): Stock price S must be positive.
-
-python cli.py price --option_type call --S 100 --K 100 --T 1 --r 0.05 --sigma 0.2 --model black-scholes --american
-# Error(s): Black-Scholes model does not support American options. Use binomial model with --american.
-```
-
----
-
-## Testing
-
-Run all tests using:
-```bash
-pytest
-```
-Check coverage:
-```bash
-pytest --cov=.
-```
-Generate HTML report:
-```bash
-pytest --cov=. --cov-report=html
-```
-Open `htmlcov/index.html` for details.
-
-### Test Coverage
-
-- All core logic for pricing and Greeks is tested, including edge cases and American options.
-- CLI behaviors (such as help and error messages) are included using subprocess.
-- Example test files:
-  - `tests/test_binomial.py` (European and American, edge/exception cases)
-  - `tests/test_black_scholes.py` (normal and error branches)
-  - `tests/test_greeks.py` (normal and error branches)
-  - `tests/test_implied_vol.py` (normal and error branches)
-  - `tests/test_cli.py` (CLI help and error response)
-- CLI code itself is not directly unit tested, but its output and error handling are verified through CLI tests.
-
----
 ## Planned Extensions
 
-- **REST API**: Will provide programmatic access to all option pricing features (`python cli.py api`)
-- **GUI**: A graphical interface for interactive use (`python cli.py gui`)
-- **Interactive CLI**: A REPL or prompt-toolkit CLI (`python cli.py interactive`)
+- **REST API**: Programmatic access to all option pricing features
+- **GUI**: A graphical interface for interactive use
+- **Interactive CLI**: A REPL or prompt-toolkit CLI
 
-*These are not yet implemented, but you can see the extension points in the CLI code.*
+*Not yet implemented, but extension points are present in the CLI code.*
 
+---
 
 ## PyPI Packaging & Build Status
 
-This project is now fully packaged with modern Python standards (`pyproject.toml`).  
-- All CLI entry points are defined in `[project.scripts]` in `pyproject.toml`
-- Build artifacts (`.whl`, `.tar.gz`) are created cleanly with zero errors or deprecated configuration
+This project is fully packaged with modern Python standards (`pyproject.toml`):
+- CLI entry points defined in `[project.scripts]`
+- Build artifacts (`.whl`, `.tar.gz`) created with zero errors or deprecated config
 - Packaging process tested and ready for PyPI publication
 
 To build locally:
@@ -394,21 +317,7 @@ To install from the wheel:
 pip install dist/quant_greeks_cli-0.1.0-py3-none-any.whl
 ```
 
-## PyPI Release
-
-[![PyPI version](https://img.shields.io/pypi/v/quant-greeks-cli.svg)](https://pypi.org/project/quant-greeks-cli/)
-
-This package is available on [PyPI](https://pypi.org/project/quant-greeks-cli/).
-
-**Install via pip:**
-```bash
-pip install quant-greeks-cli
-```
-
-**Usage:**
-```bash
-quant-greeks-cli --help
-```
+---
 
 ## License
 
@@ -419,5 +328,3 @@ MIT License
 ## Author
 
 Patience Fuglo
-
-```
